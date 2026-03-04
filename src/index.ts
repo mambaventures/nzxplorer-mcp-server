@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.2.0",
+  version: "1.3.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -299,6 +299,40 @@ server.tool(
     const text = await api(`/financials/${ticker.toUpperCase()}`, {
       statement,
       year,
+      limit,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 10: get_earnings
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_earnings",
+  "Get structured earnings results for an NZX company. Extracted from full-year (FLLYR) and half-year (HALFYR) announcement PDFs. Returns revenue, net profit, EBITDA, EBIT, EPS, dividends per share, guidance, and prior period comparisons. All monetary values in NZD thousands.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'SPK')"),
+    year: z
+      .string()
+      .optional()
+      .describe("Filter by year: single year (e.g. '2024') or range (e.g. '2020-2024')"),
+    period: z
+      .enum(["annual", "interim"])
+      .optional()
+      .describe("Filter by period type: 'annual' for full-year, 'interim' for half-year"),
+    limit: z
+      .number()
+      .min(1)
+      .max(100)
+      .optional()
+      .describe("Number of results (default 50)"),
+  },
+  async ({ ticker, year, period, limit }) => {
+    const text = await api(`/earnings/${ticker.toUpperCase()}`, {
+      year,
+      period,
       limit,
     });
     return { content: [{ type: "text" as const, text }] };
