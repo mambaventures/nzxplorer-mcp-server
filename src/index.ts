@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.0.0",
+  version: "1.1.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -135,7 +135,7 @@ server.tool(
       .string()
       .optional()
       .describe(
-        "Comma-separated additional data: trades (insider share transactions), remuneration (board fees history), or 'all'",
+        "Comma-separated additional data: trades (insider share transactions), remuneration (board fees), exec_comp (executive pay packages with STI/LTI), or 'all'",
       ),
   },
   async ({ slug, include }) => {
@@ -230,6 +230,41 @@ server.tool(
   },
   async ({ search, ticker, type, from, to, limit }) => {
     const text = await api("/announcements", { search, ticker, type, from, to, limit });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 8: get_insider_trades
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_insider_trades",
+  "Get insider (director) share transactions for NZX companies. 4,100+ trades covering buy/sell/exercise transactions. Shows who is buying and selling, how much, and at what price. Filter by company ticker, transaction type, date range, or specific director.",
+  {
+    ticker: z
+      .string()
+      .optional()
+      .describe("Filter by company ticker (e.g. 'AIR', 'FPH')"),
+    type: z
+      .string()
+      .optional()
+      .describe("Filter by transaction type (e.g. 'Buy', 'Sell', 'Exercise')"),
+    director: z
+      .string()
+      .optional()
+      .describe("Filter by director slug (e.g. 'john-smith')"),
+    from: z.string().optional().describe("Start date in YYYY-MM-DD format"),
+    to: z.string().optional().describe("End date in YYYY-MM-DD format"),
+    limit: z
+      .number()
+      .min(1)
+      .max(100)
+      .optional()
+      .describe("Number of results (default 50, max 100)"),
+  },
+  async ({ ticker, type, director, from, to, limit }) => {
+    const text = await api("/insider-trades", { ticker, type, director, from, to, limit });
     return { content: [{ type: "text" as const, text }] };
   },
 );
