@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.5.0",
+  version: "1.6.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -389,6 +389,80 @@ server.tool(
   },
   async ({ ticker }) => {
     const text = await api(`/technical-signals/${ticker.toUpperCase()}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 13: screen_stocks
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "screen_stocks",
+  "Screen NZX stocks using 87+ financial, governance, and technical metrics. Supports 12 smart presets (value, growth, quality, dividend_at_risk, insider_buying, capital_raise_likely, ceo_pay_for_failure, governance_laggards, oversold, overbought, golden_cross, below_200ma) and custom metric filters. Returns matching companies with selected columns, sorted by any metric. Use this to find stocks matching specific criteria like 'PE under 15 with dividend yield above 5%' or 'RSI below 30'.",
+  {
+    preset: z
+      .enum([
+        "value",
+        "growth",
+        "quality",
+        "dividend_at_risk",
+        "insider_buying",
+        "capital_raise_likely",
+        "ceo_pay_for_failure",
+        "governance_laggards",
+        "oversold",
+        "overbought",
+        "golden_cross",
+        "below_200ma",
+      ])
+      .optional()
+      .describe(
+        "Smart preset filter. Each preset applies specific metric filters and shows relevant columns.",
+      ),
+    filter: z
+      .string()
+      .optional()
+      .describe(
+        "Custom metric filters as comma-separated conditions. Format: metric>value,metric<value. Examples: 'pe_ratio<15,dividend_yield>3', 'rsi_14<30', 'roe>15,debt_to_equity<1'. Operators: >, <, >=, <=, =. Available metrics include: pe_ratio, pb_ratio, dividend_yield, roe, roa, net_margin, revenue_growth_yoy, debt_to_equity, current_ratio, rsi_14, price_vs_sma200_pct, grs_score, insider_conviction_score, dividend_safety_score, and 70+ more.",
+      ),
+    sector: z
+      .string()
+      .optional()
+      .describe("Filter by sector (e.g. 'Energy', 'Healthcare', 'Property')"),
+    q: z.string().optional().describe("Search by company name or ticker"),
+    sort: z
+      .string()
+      .optional()
+      .describe(
+        "Sort by any column name (e.g. 'pe_ratio', 'market_cap', 'dividend_yield', 'rsi_14', 'grs_score')",
+      ),
+    order: z.enum(["asc", "desc"]).optional().describe("Sort order (default 'asc')"),
+    limit: z
+      .number()
+      .min(1)
+      .max(130)
+      .optional()
+      .describe("Number of results (default 50, max 130)"),
+  },
+  async ({ preset, filter, sector, q, sort, order, limit }) => {
+    const text = await api("/screener", { preset, filter, sector, q, sort, order, limit });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 14: get_performance
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_performance",
+  "Get stock performance metrics for an NZX company. Returns price returns (1D, 1W, 1M, 3M, 6M, 1Y, 3Y, 5Y), alpha vs NZX50 benchmark, sector alpha, volatility, beta, 52-week high/low, and market capitalization. Updated daily.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'MEL')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/performance/${ticker.toUpperCase()}`);
     return { content: [{ type: "text" as const, text }] };
   },
 );
