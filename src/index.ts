@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.3.0",
+  version: "1.4.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -333,6 +333,44 @@ server.tool(
     const text = await api(`/earnings/${ticker.toUpperCase()}`, {
       year,
       period,
+      limit,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 11: get_dividends
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_dividends",
+  "Get dividend history for an NZX company. Returns ex-date, record date, payment date, DPS (cents), imputation %, supplementary dividends, DRP availability, and dividend safety metrics. 1,184 records across 102 companies.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'SPK')"),
+    year: z
+      .string()
+      .optional()
+      .describe(
+        "Filter by year: single year (e.g. '2024') or range (e.g. '2020-2024')",
+      ),
+    type: z
+      .string()
+      .optional()
+      .describe(
+        "Filter by dividend type: 'final', 'interim', or 'special'. Comma-separated for multiple.",
+      ),
+    limit: z
+      .number()
+      .min(1)
+      .max(100)
+      .optional()
+      .describe("Number of results (default 50)"),
+  },
+  async ({ ticker, year, type, limit }) => {
+    const text = await api(`/dividends/${ticker.toUpperCase()}`, {
+      year,
+      type,
       limit,
     });
     return { content: [{ type: "text" as const, text }] };
