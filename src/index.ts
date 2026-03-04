@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.4.0",
+  version: "1.5.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -373,6 +373,22 @@ server.tool(
       type,
       limit,
     });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 12: get_technical_signals
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_technical_signals",
+  "Get technical analysis indicators for an NZX company. Returns SMA-50/100/200 moving averages, RSI-14 momentum, golden/death cross signals, distance from 52-week high/low, and volume ratios. Updated daily. 127/130 companies covered.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'MEL')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/technical-signals/${ticker.toUpperCase()}`);
     return { content: [{ type: "text" as const, text }] };
   },
 );
