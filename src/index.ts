@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.1.0",
+  version: "1.2.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -265,6 +265,42 @@ server.tool(
   },
   async ({ ticker, type, director, from, to, limit }) => {
     const text = await api("/insider-trades", { ticker, type, director, from, to, limit });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 9: get_financials
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_financials",
+  "Get normalized financial statements for an NZX company. Returns income statements, balance sheets, cash flow statements, and financial ratios. All monetary values in NZD thousands. 367 records across 116 companies, FY2010-2025.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'SPK')"),
+    statement: z
+      .enum(["income", "balance", "cashflow", "ratios"])
+      .optional()
+      .describe(
+        "Which financial statement to return. If omitted, returns all four. income = revenue/profit/EPS/dividends. balance = assets/liabilities/equity. cashflow = operating/investing/financing/free. ratios = margins/ROE/ROA/debt-to-equity.",
+      ),
+    year: z
+      .string()
+      .optional()
+      .describe("Filter by year: single year (e.g. '2024') or range (e.g. '2020-2024')"),
+    limit: z
+      .number()
+      .min(1)
+      .max(100)
+      .optional()
+      .describe("Number of results per statement (default 50)"),
+  },
+  async ({ ticker, statement, year, limit }) => {
+    const text = await api(`/financials/${ticker.toUpperCase()}`, {
+      statement,
+      year,
+      limit,
+    });
     return { content: [{ type: "text" as const, text }] };
   },
 );
