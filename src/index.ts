@@ -493,7 +493,7 @@ server.tool(
 
 server.tool(
   "get_market_signals",
-  "Get the Market Intelligence Feed — a unified stream of all NZX market events: insider trades, capital raises, dividends, earnings releases, AGM results (failed/contentious), director appointments/resignations, and governance score changes. Sorted by date descending. Use for 'what happened on the NZX today/this week?', 'any recent insider trades?', or 'market activity for [company]'.",
+  "Get the Market Intelligence Feed — a unified stream of all NZX market events: 10 signal types including insider trades, capital raises, dividends, earnings releases, AGM results, director changes, governance score changes, technical signals (golden/death cross, RSI extremes), credit rating changes, and auditor changes. Sorted by date descending. Use for 'what happened on the NZX today/this week?', 'any golden crosses?', 'credit rating changes?', or 'market activity for [company]'.",
   {
     ticker: z
       .string()
@@ -503,7 +503,7 @@ server.tool(
       .string()
       .optional()
       .describe(
-        "Comma-separated signal types: insider_trade, capital_raise, dividend, earnings, agm_result, director_change, grs_change",
+        "Comma-separated signal types: insider_trade, capital_raise, dividend, earnings, agm_result, director_change, grs_change, technical_signal, credit_rating, audit_change",
       ),
     days: z
       .number()
