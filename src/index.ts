@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.7.0",
+  version: "1.8.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -483,6 +483,56 @@ server.tool(
   },
   async ({ slug }) => {
     const text = await api(`/director-report/${slug}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 16: get_market_signals
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_market_signals",
+  "Get the Market Intelligence Feed — a unified stream of all NZX market events: insider trades, capital raises, dividends, earnings releases, AGM results (failed/contentious), director appointments/resignations, and governance score changes. Sorted by date descending. Use for 'what happened on the NZX today/this week?', 'any recent insider trades?', or 'market activity for [company]'.",
+  {
+    ticker: z
+      .string()
+      .optional()
+      .describe("Filter by company ticker (e.g. 'AIR', 'MEL')"),
+    type: z
+      .string()
+      .optional()
+      .describe(
+        "Comma-separated signal types: insider_trade, capital_raise, dividend, earnings, agm_result, director_change, grs_change",
+      ),
+    days: z
+      .number()
+      .optional()
+      .describe(
+        "Days to look back (default 180). Use 7 for 'this week', 1 for 'today'.",
+      ),
+    significance: z
+      .string()
+      .optional()
+      .describe("Filter by significance: high, medium, low"),
+    sector: z
+      .string()
+      .optional()
+      .describe("Filter by sector (e.g. 'Energy', 'Healthcare')"),
+    limit: z
+      .number()
+      .optional()
+      .describe("Max results (default 50)"),
+  },
+  async ({ ticker, type, days, significance, sector, limit }) => {
+    const text = await api("/signals", {
+      ticker,
+      type,
+      days,
+      significance,
+      sector,
+      limit,
+    });
     return { content: [{ type: "text" as const, text }] };
   },
 );
