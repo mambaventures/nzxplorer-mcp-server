@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.6.0",
+  version: "1.7.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -463,6 +463,26 @@ server.tool(
   },
   async ({ ticker }) => {
     const text = await api(`/performance/${ticker.toUpperCase()}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 15: get_director_due_diligence
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_director_due_diligence",
+  "Get a comprehensive due diligence report for any NZX director. Aggregates all board positions (with GRS scores), overboarding assessment, remuneration across all boards with peer percentile, executive compensation, insider trading activity summary, AGM election voting record, governance contribution analysis, stock performance during tenure, and automated risk flags. Designed for executive search firms, law firms, and nominating committees assessing board candidates.",
+  {
+    slug: z
+      .string()
+      .describe(
+        "Director URL slug (e.g. 'joan-withers', 'mark-cross'). Find slugs via get_directors.",
+      ),
+  },
+  async ({ slug }) => {
+    const text = await api(`/director-report/${slug}`);
     return { content: [{ type: "text" as const, text }] };
   },
 );
