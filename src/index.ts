@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.11.0",
+  version: "1.12.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -708,6 +708,43 @@ server.tool(
       status,
       deal_type,
       year,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 23: get_board_changes
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_board_changes",
+  "Get board changes (director appointments, resignations, retirements, removals) for an NZX company. 1,242 changes across 105 issuers (2017-2026). Shows director name, action, role, effective date, who they replaced, reason for departure, and linked director profile. Use for 'who joined/left the board?', 'recent director changes at [company]', 'board turnover history'.",
+  {
+    ticker: z
+      .string()
+      .describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'MEL')"),
+    action: z
+      .string()
+      .optional()
+      .describe(
+        "Filter by action type: appointed, resigned, retired, removed, elected, re-elected. Comma-separated for multiple (e.g. 'resigned,retired').",
+      ),
+    from: z.string().optional().describe("Start date in YYYY-MM-DD format"),
+    to: z.string().optional().describe("End date in YYYY-MM-DD format"),
+    limit: z
+      .number()
+      .min(1)
+      .max(100)
+      .optional()
+      .describe("Number of results (default 50, max 100)"),
+  },
+  async ({ ticker, action, from, to, limit }) => {
+    const text = await api(`/board-changes/${ticker.toUpperCase()}`, {
+      action,
+      from,
+      to,
+      limit,
     });
     return { content: [{ type: "text" as const, text }] };
   },
