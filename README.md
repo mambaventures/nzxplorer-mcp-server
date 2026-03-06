@@ -2,7 +2,7 @@
 
 An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that gives AI assistants like Claude Desktop and Cursor direct access to New Zealand stock market data via the [NZXplorer API](https://nzxplorer.co.nz/developers).
 
-Query 130 NZX-listed companies, 1,300+ directors, 162,000+ daily stock prices, governance risk scores, 4,100+ insider trades, 64,000+ company announcements, anomaly detection, market signals, and a powerful stock screener with 87+ metrics — all from natural language.
+Query 130 NZX-listed companies, 1,300+ directors, 162,000+ daily stock prices, governance risk scores, 4,100+ insider trades, 64,000+ company announcements, anomaly detection, market signals, proxy advisory voting recommendations, and a powerful stock screener with 87+ metrics — all from natural language.
 
 ## Quick Install (npm)
 
@@ -37,6 +37,7 @@ npm install -g nzxplorer-mcp
 | `get_director_due_diligence` | Comprehensive director due diligence report — 8 tables, 11 sections |
 | `get_market_signals` | Market Intelligence Feed — 10 signal types, unified event stream across all NZX companies |
 | `get_anomalies` | Anomaly detection — 12 types across 5 categories (insider, governance, financial, market, AGM) |
+| `get_proxy_report` | Proxy advisory voting recommendations — FOR/AGAINST/REFER per AGM resolution with 34 rules, 8 policy presets |
 
 ## Setup
 
@@ -117,6 +118,9 @@ Once connected, you can ask Claude things like:
 - "Are there any red flags or anomalies on the NZX right now?"
 - "What market events happened this week?"
 - "Any insider trading clusters or governance concerns for Fletcher Building?"
+- "How should I vote at the Air New Zealand AGM?"
+- "Get the proxy advisory report for Mercury NZ"
+- "What are the voting recommendations for Spark's resolutions?"
 
 ## Environment Variables
 

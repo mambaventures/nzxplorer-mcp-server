@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.8.0",
+  version: "1.9.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -574,6 +574,34 @@ server.tool(
       severity,
       sector,
       days,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// Tool 18: get_proxy_report
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_proxy_report",
+  "Get automated proxy advisory voting recommendations for a company's AGM resolutions. Analyses board composition, remuneration, auditor independence, capital management, constitution changes, related-party transactions, and shareholder proposals against configurable voting policies (8 presets including NZ Super Fund, ISS NZ Benchmark, Russell Investments NZ, Vanguard AU/NZ). Returns FOR/AGAINST/REFER per resolution with severity, reasoning, and data points. Use for 'how should I vote at [company] AGM?', 'proxy report for AIR', 'voting recommendations for MEL'.",
+  {
+    ticker: z
+      .string()
+      .describe("Company ticker (e.g. 'AIR', 'MEL', 'FPH')"),
+    year: z
+      .string()
+      .optional()
+      .describe("Meeting year to filter resolutions (e.g. '2025'). Default: latest"),
+    meeting_id: z
+      .string()
+      .optional()
+      .describe("Specific meeting ID if known"),
+  },
+  async ({ ticker, year, meeting_id }) => {
+    const text = await api(`/proxy-report/${encodeURIComponent(ticker)}`, {
+      year,
+      meeting_id,
     });
     return { content: [{ type: "text" as const, text }] };
   },
