@@ -614,7 +614,42 @@ server.tool(
 );
 
 // ---------------------------------------------------------------------------
-// Tool 20: get_proxy_report
+// Tool 20: get_esg_xbrl
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_esg_xbrl",
+  "Get machine-readable NZ Climate Standards (NZ CS 1-3) tagged ESG/climate disclosure for an NZX company. Returns XRB Aotearoa taxonomy-tagged emissions (Scope 1/2/3 GHG), diversity metrics (board/SLT/employee gender), workplace safety (LTIFR/TRIFR), and reporting framework compliance (GRI, TCFD, SBTi, SDG). Use when the user wants ESG data, climate disclosures, emissions, diversity stats, or sustainability data in structured format.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'MEL', 'CEN', 'GNE')"),
+    year: z
+      .string()
+      .optional()
+      .describe("Fiscal year (e.g. '2024'). Default: latest available year."),
+  },
+  async ({ ticker, year }) => {
+    const url = new URL(`/api/v1/esg/${ticker.toUpperCase()}/xbrl`, BASE_URL);
+    url.searchParams.set("format", "json");
+    if (year) url.searchParams.set("year", year);
+
+    const headers: Record<string, string> = {};
+    if (API_KEY) headers["X-API-Key"] = API_KEY;
+
+    const res = await fetch(url.toString(), { headers });
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      const msg = (body as Record<string, unknown>).error || `HTTP ${res.status}`;
+      throw new Error(String(msg));
+    }
+
+    const data = await res.json();
+    return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 21: get_proxy_report
 // ---------------------------------------------------------------------------
 
 server.tool(
