@@ -537,6 +537,48 @@ server.tool(
   },
 );
 
+// Tool 17: get_anomalies
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_anomalies",
+  "Detect unusual patterns and red flags across NZX companies. Scans 12 anomaly types across 5 categories: insider trading (clusters, exodus, conviction shifts), governance (GRS deterioration, director exodus, audit changes), financial (dividend cut risk, capital raise patterns, earnings concerns), market (technical breakdowns/breakouts), and AGM (shareholder revolts). Returns anomalies sorted by severity. Use for 'any red flags?', 'governance concerns for [company]?', 'insider trading anomalies'.",
+  {
+    ticker: z
+      .string()
+      .optional()
+      .describe("Filter by company ticker (e.g. 'AIR', 'MEL')"),
+    category: z
+      .string()
+      .optional()
+      .describe(
+        "Filter by category: insider, governance, financial, market, agm",
+      ),
+    severity: z
+      .string()
+      .optional()
+      .describe("Filter by severity: critical, warning, watch"),
+    sector: z
+      .string()
+      .optional()
+      .describe("Filter by sector (e.g. 'Energy', 'Healthcare')"),
+    days: z
+      .number()
+      .optional()
+      .describe("Days to look back (default 180)"),
+  },
+  async ({ ticker, category, severity, sector, days }) => {
+    const text = await api("/anomalies", {
+      ticker,
+      category,
+      severity,
+      sector,
+      days,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
 // ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------

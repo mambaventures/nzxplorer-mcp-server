@@ -2,7 +2,7 @@
 
 An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that gives AI assistants like Claude Desktop and Cursor direct access to New Zealand stock market data via the [NZXplorer API](https://nzxplorer.co.nz/developers).
 
-Query 130 NZX-listed companies, 1,300+ directors, 162,000+ daily stock prices, governance risk scores, 4,100+ insider trades, 64,000+ company announcements, and a powerful stock screener with 87+ metrics — all from natural language.
+Query 130 NZX-listed companies, 1,300+ directors, 162,000+ daily stock prices, governance risk scores, 4,100+ insider trades, 64,000+ company announcements, anomaly detection, market signals, and a powerful stock screener with 87+ metrics — all from natural language.
 
 ## Quick Install (npm)
 
@@ -34,6 +34,9 @@ npm install -g nzxplorer-mcp
 | `get_technical_signals` | Technical indicators — SMA-50/100/200, RSI-14, golden/death cross, volume ratios |
 | `screen_stocks` | Screen stocks using 87+ metrics, 12 smart presets, and custom filters (e.g. PE<15, RSI<30) |
 | `get_performance` | Stock performance — returns (1D-5Y), alpha vs NZX50, volatility, beta, 52-week range |
+| `get_director_due_diligence` | Comprehensive director due diligence report — 8 tables, 11 sections |
+| `get_market_signals` | Market Intelligence Feed — 10 signal types, unified event stream across all NZX companies |
+| `get_anomalies` | Anomaly detection — 12 types across 5 categories (insider, governance, financial, market, AGM) |
 
 ## Setup
 
@@ -111,6 +114,9 @@ Once connected, you can ask Claude things like:
 - "Find oversold NZX stocks with RSI below 30"
 - "Which stocks have a golden cross signal right now?"
 - "Show me Air New Zealand's financial performance over the last 5 years"
+- "Are there any red flags or anomalies on the NZX right now?"
+- "What market events happened this week?"
+- "Any insider trading clusters or governance concerns for Fletcher Building?"
 
 ## Environment Variables
 
