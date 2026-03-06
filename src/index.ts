@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.10.0",
+  version: "1.11.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -672,6 +672,42 @@ server.tool(
     const text = await api(`/proxy-report/${encodeURIComponent(ticker)}`, {
       year,
       meeting_id,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 22: get_takeovers
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_takeovers",
+  "Get M&A and takeover activity for NZX companies. 313 deals across 51 issuers (2017-2026). 11 deal types: takeover_offer, acquisition, scheme_of_arrangement, merger, asset_acquisition, property_acquisition, compulsory_acquisition, and more. Returns acquirer, target, deal type, offer price, premium, status, acceptance %, key dates, and conditions. Use for 'any takeover activity for [company]?', 'recent M&A deals', 'scheme of arrangement history'.",
+  {
+    ticker: z
+      .string()
+      .describe("NZX ticker symbol of the target company (e.g. 'THL', 'NZM', 'TRA')"),
+    status: z
+      .string()
+      .optional()
+      .describe("Filter by deal status (e.g. 'completed', 'active', 'lapsed', 'withdrawn')"),
+    deal_type: z
+      .string()
+      .optional()
+      .describe(
+        "Filter by deal type: takeover_offer, acquisition, scheme_of_arrangement, merger, asset_acquisition, property_acquisition, compulsory_acquisition",
+      ),
+    year: z
+      .string()
+      .optional()
+      .describe("Filter by year (e.g. '2025') or range (e.g. '2020-2025')"),
+  },
+  async ({ ticker, status, deal_type, year }) => {
+    const text = await api(`/takeovers/${ticker.toUpperCase()}`, {
+      status,
+      deal_type,
+      year,
     });
     return { content: [{ type: "text" as const, text }] };
   },
