@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.9.0",
+  version: "1.10.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -579,7 +579,42 @@ server.tool(
   },
 );
 
-// Tool 18: get_proxy_report
+// Tool 19: get_financials_xbrl
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_financials_xbrl",
+  "Get machine-readable iXBRL (Inline XBRL) financial statements for an NZX company. Returns IFRS taxonomy-tagged income statements, balance sheets, cash flows, and financial ratios. Each data point is tagged with its XBRL concept (e.g. ifrs-full:Revenue), period context, and unit. 116 companies, FY2010-2025. Use when the user wants structured/machine-readable financial data, XBRL output, or data for programmatic consumption.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'MEL')"),
+    year: z
+      .string()
+      .optional()
+      .describe("Fiscal year (e.g. '2024'). Default: latest available year."),
+  },
+  async ({ ticker, year }) => {
+    const url = new URL(`/api/v1/financials/${ticker.toUpperCase()}/xbrl`, BASE_URL);
+    url.searchParams.set("format", "json");
+    if (year) url.searchParams.set("year", year);
+
+    const headers: Record<string, string> = {};
+    if (API_KEY) headers["X-API-Key"] = API_KEY;
+
+    const res = await fetch(url.toString(), { headers });
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      const msg = (body as Record<string, unknown>).error || `HTTP ${res.status}`;
+      throw new Error(String(msg));
+    }
+
+    const data = await res.json();
+    return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 20: get_proxy_report
 // ---------------------------------------------------------------------------
 
 server.tool(
