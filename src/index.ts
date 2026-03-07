@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.16.0",
+  version: "1.17.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -856,6 +856,50 @@ server.tool(
   },
   async ({ keyword }) => {
     const text = await api("/keyword-trends", { keyword });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 29: list_stewardship_reports
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "list_stewardship_reports",
+  "List FMA-compliant stewardship/voting-record reports for the authenticated user. Returns report summaries with vote counts, compliance rates, and period dates. Enterprise tier required.",
+  {},
+  async () => {
+    const text = await api("/stewardship-reports");
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 30: get_stewardship_report
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_stewardship_report",
+  "Get full detail for a specific stewardship report by ID, including per-company resolution analysis, vote recommendations, and the policy used. Enterprise tier required.",
+  {
+    id: z.number().describe("Stewardship report ID"),
+  },
+  async ({ id }) => {
+    const text = await api(`/stewardship-reports/${id}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 31: list_voting_policies
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "list_voting_policies",
+  "List all custom voting policies for the authenticated user. Each policy defines threshold overrides for the proxy advisory engine (board independence, remuneration caps, tenure limits, gender diversity, etc.). Enterprise or Institutional tier required.",
+  {},
+  async () => {
+    const text = await api("/voting-policies");
     return { content: [{ type: "text" as const, text }] };
   },
 );
