@@ -41,6 +41,8 @@ npm install -g nzxplorer-mcp
 | `get_takeovers` | M&A and takeover activity — 313 deals, 51 issuers, 11 deal types (2017-2026) |
 | `get_board_changes` | Board changes — appointments, resignations, retirements. 1,242 changes across 105 issuers |
 | `get_board_composition_report` | Board composition analytics — independence, diversity, tenure, skills, succession risk, peer comparison |
+| `get_accounting_quality` | Accounting quality scores — Beneish M-score, Piotroski F-score, Altman Z-score, interest coverage, current ratio, overall rating |
+| `get_credit_ratings` | Credit ratings from S&P, Moody's, Fitch, AM Best — rating, outlook, action, history |
 
 ## Setup
 

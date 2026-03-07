@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.13.0",
+  version: "1.14.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -764,6 +764,66 @@ server.tool(
   },
   async ({ ticker }) => {
     const text = await api(`/board-report/${ticker.toUpperCase()}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 25: get_accounting_quality
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_accounting_quality",
+  "Get accounting quality scores for an NZX company. Shows Beneish M-score (earnings manipulation probability, >-1.78 suggests manipulation), Piotroski F-score (financial strength 0-9, higher is better), Altman Z-score (bankruptcy risk: >2.99 safe, 1.81-2.99 grey zone, <1.81 distress), plus interest coverage, current ratio, and overall composite score (0-100). 128 issuers scored. Use for 'is [company] at risk of manipulation?', 'financial health of [company]', 'bankruptcy risk', 'accounting quality'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'MEL')"),
+    year: z
+      .string()
+      .optional()
+      .describe("Filter by year: single year (e.g. '2024') or range (e.g. '2020-2024')"),
+    limit: z
+      .number()
+      .min(1)
+      .max(100)
+      .optional()
+      .describe("Number of results (default 50)"),
+  },
+  async ({ ticker, year, limit }) => {
+    const text = await api(`/accounting-quality/${ticker.toUpperCase()}`, { year, limit });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 26: get_credit_ratings
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_credit_ratings",
+  "Get credit rating history for an NZX company. Shows S&P, Moody's, Fitch, AM Best, Equifax ratings with upgrades, downgrades, outlook changes, and rating actions. ~80 ratings across ~20 NZX issuers (mainly banks, utilities, large caps). Use for 'credit rating for [company]', 'has [company] been downgraded?', 'investment grade NZX companies'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'ANZ', 'WBC', 'MEL', 'SPK')"),
+    year: z
+      .string()
+      .optional()
+      .describe("Filter by year: single year (e.g. '2024') or range (e.g. '2020-2024')"),
+    agency: z
+      .string()
+      .optional()
+      .describe("Filter by rating agency: 'S&P', 'Moodys', 'Fitch', 'AM Best', 'Equifax'"),
+    action: z
+      .string()
+      .optional()
+      .describe("Filter by action: affirmed, upgraded, downgraded, assigned, withdrawn, revised"),
+    limit: z
+      .number()
+      .min(1)
+      .max(100)
+      .optional()
+      .describe("Number of results (default 50)"),
+  },
+  async ({ ticker, year, agency, action, limit }) => {
+    const text = await api(`/credit-ratings/${ticker.toUpperCase()}`, { year, agency, action, limit });
     return { content: [{ type: "text" as const, text }] };
   },
 );
