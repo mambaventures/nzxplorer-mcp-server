@@ -2,7 +2,7 @@
 
 An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that gives AI assistants like Claude Desktop and Cursor direct access to New Zealand stock market data via the [NZXplorer API](https://nzxplorer.co.nz/developers).
 
-Query 130 NZX-listed companies, 1,300+ directors, 162,000+ daily stock prices, governance risk scores, 4,100+ insider trades, 64,000+ company announcements, anomaly detection, market signals, proxy advisory voting recommendations, and a powerful stock screener with 87+ metrics — all from natural language.
+Query 130 NZX-listed companies, 1,300+ directors, 162,000+ daily stock prices, governance risk scores, 4,100+ insider trades, 64,000+ company announcements, board composition analytics, anomaly detection, market signals, proxy advisory voting recommendations, and a powerful stock screener with 87+ metrics — all from natural language.
 
 ## Quick Install (npm)
 
@@ -38,6 +38,9 @@ npm install -g nzxplorer-mcp
 | `get_market_signals` | Market Intelligence Feed — 10 signal types, unified event stream across all NZX companies |
 | `get_anomalies` | Anomaly detection — 12 types across 5 categories (insider, governance, financial, market, AGM) |
 | `get_proxy_report` | Proxy advisory voting recommendations — FOR/AGAINST/REFER per AGM resolution with 34 rules, 8 policy presets |
+| `get_takeovers` | M&A and takeover activity — 313 deals, 51 issuers, 11 deal types (2017-2026) |
+| `get_board_changes` | Board changes — appointments, resignations, retirements. 1,242 changes across 105 issuers |
+| `get_board_composition_report` | Board composition analytics — independence, diversity, tenure, skills, succession risk, peer comparison |
 
 ## Setup
 
@@ -121,6 +124,9 @@ Once connected, you can ask Claude things like:
 - "How should I vote at the Air New Zealand AGM?"
 - "Get the proxy advisory report for Mercury NZ"
 - "What are the voting recommendations for Spark's resolutions?"
+- "Analyze the board composition of Fisher & Paykel Healthcare"
+- "What is the succession risk for Air New Zealand's board?"
+- "Who recently joined or left the board at Fletcher Building?"
 
 ## Environment Variables
 

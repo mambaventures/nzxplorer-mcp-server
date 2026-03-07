@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.12.0",
+  version: "1.13.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -746,6 +746,24 @@ server.tool(
       to,
       limit,
     });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 24: get_board_composition_report
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_board_composition_report",
+  "Get a comprehensive board composition analytics report for an NZX company. Analyzes board independence vs NZX Code requirements, gender diversity vs 30% target, tenure distribution with 9-year limit flags, skills matrix with gap identification, meeting attendance, director fee benchmarking, CEO pay ratio, succession risk scoring (low/medium/high/critical), board turnover rates, and peer comparison against sector averages. Returns automated risk flags across 10 categories. Use for 'board composition for [company]', 'governance quality analysis', 'succession risk', 'board diversity metrics', or 'nomination committee report'.",
+  {
+    ticker: z
+      .string()
+      .describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'MEL')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/board-report/${ticker.toUpperCase()}`);
     return { content: [{ type: "text" as const, text }] };
   },
 );

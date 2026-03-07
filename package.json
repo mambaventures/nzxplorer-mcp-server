@@ -1,7 +1,7 @@
 {
   "name": "nzxplorer-mcp",
-  "version": "1.12.0",
-  "description": "MCP server for NZX (New Zealand Stock Exchange) financial data — governance scores, insider trades, stock prices, directors, financials, iXBRL statements, ESG/climate disclosures, earnings, board changes, technical signals, stock screener, anomaly detection, proxy advisory, and 64,000+ company announcements",
+  "version": "1.13.0",
+  "description": "MCP server for NZX (New Zealand Stock Exchange) financial data — governance scores, insider trades, stock prices, directors, financials, iXBRL statements, ESG/climate disclosures, earnings, board changes, board composition reports, technical signals, stock screener, anomaly detection, proxy advisory, and 64,000+ company announcements",
   "type": "module",
   "bin": {
     "nzxplorer-mcp": "./build/index.js"
