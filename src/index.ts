@@ -829,6 +829,22 @@ server.tool(
 );
 
 // ---------------------------------------------------------------------------
+// Tool 27: search_keyword_trends
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "search_keyword_trends",
+  "Search any keyword or phrase across 64,000+ NZX company announcements and see how often it appears over time. Returns frequency by year, sector, and top companies. Like Google Trends for corporate filings. Use for 'when did companies start talking about AI?', 'which sector mentions climate risk most?', 'how often does restructuring appear in filings?'.",
+  {
+    keyword: z.string().describe("Keyword or phrase to search (e.g. 'artificial intelligence', 'restructuring', 'net zero', 'covenant breach')"),
+  },
+  async ({ keyword }) => {
+    const text = await api("/keyword-trends", { keyword });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
 
