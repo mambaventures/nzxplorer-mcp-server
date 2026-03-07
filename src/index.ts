@@ -905,6 +905,42 @@ server.tool(
 );
 
 // ---------------------------------------------------------------------------
+// Tool 32: get_revenue_segments
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_revenue_segments",
+  "Get revenue segment breakdown for an NZX company. Returns IFRS 8 operating, geographic, or product segment data including segment revenue, operating profit, assets (all in NZD thousands), and revenue percentage. Extracted from annual report PDFs. Use for 'revenue breakdown for [company]', 'business segments', 'divisions', 'product groups', 'geographic revenue split', 'segment analysis'. Multi-segment companies like FPH (Hospital/Homecare), MEL (Wholesale/Retail), FBU (Building Products/Construction/Distribution).",
+  {
+    ticker: z
+      .string()
+      .describe("NZX ticker symbol (e.g. 'FPH', 'SKC', 'MEL', 'FBU')"),
+    year: z
+      .string()
+      .optional()
+      .describe("Filter by year (e.g. '2025') or range (e.g. '2020-2025')"),
+    type: z
+      .string()
+      .optional()
+      .describe("Segment type filter: operating, geographic, product"),
+    limit: z
+      .number()
+      .min(1)
+      .max(200)
+      .optional()
+      .describe("Number of results (default 50)"),
+  },
+  async ({ ticker, year, type, limit }) => {
+    const text = await api(`/segments/${ticker.toUpperCase()}`, {
+      year,
+      type,
+      limit,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
 
