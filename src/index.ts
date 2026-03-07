@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.14.0",
+  version: "1.16.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -829,7 +829,23 @@ server.tool(
 );
 
 // ---------------------------------------------------------------------------
-// Tool 27: search_keyword_trends
+// Tool 27: get_risk_language
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_risk_language",
+  "Get pre-computed risk language scores for an NZX company. Scans 64,000+ announcements for 8 risk categories: going_concern, covenant, impairment, litigation, restructuring, liquidity, regulatory, force_majeure. Returns total mentions, 12-month trend, category breakdown, critical flags, first-time detections, and yearly trend. Use when asked about risk factors, going concern warnings, covenant issues, litigation exposure, or regulatory risk.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'FBU', 'AIR', 'MEL')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/risk-language/${ticker.toUpperCase()}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 28: search_keyword_trends
 // ---------------------------------------------------------------------------
 
 server.tool(
