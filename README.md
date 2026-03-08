@@ -52,6 +52,9 @@ npm install -g nzxplorer-mcp
 | `list_alert_subscriptions` | List alert subscriptions — 11 signal types, 6 anomaly categories, HMAC-SHA256 webhooks (Enterprise) |
 | `get_capital_raises` | Capital raise history — 11,088 events across 130 issuers (placements, rights, SPPs, buybacks, DRPs) |
 | `get_semantic_search` | AI semantic search across 64K+ announcements — hybrid keyword+vector+reranking |
+| `get_iod_designations` | IoD designated directors — CFInstD, CMInstD, CDir, MInstD credentials on NZX boards |
+| `get_board_skills_matrix` | Board skills matrix — 12 IoD NZ/ASX categories, gap analysis, diversity score |
+| `get_research_briefing` | Investment research briefing — 15+ data sources, AI narrative, 4 templates (general/thesis/DD/board) |
 
 ## Setup
 

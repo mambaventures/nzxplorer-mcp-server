@@ -1058,6 +1058,53 @@ server.tool(
 );
 
 // ---------------------------------------------------------------------------
+// Tool 37: get_board_skills_matrix
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_board_skills_matrix",
+  "Get the board skills matrix for an NZX company. Shows per-director skills across 12 IoD NZ/ASX CGC categories (finance, legal, technology, industry, governance, risk, strategy, HR, sustainability, digital, international, marketing), board-level gap analysis (critical/single_point/depth_gap/adequate), and diversity score. Use for 'board skills at [company]', 'skills matrix', 'board gaps', 'director competencies', 'governance capability'.",
+  {
+    ticker: z
+      .string()
+      .describe("NZX ticker symbol (e.g. 'FPH', 'AIR')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/skills-matrix/${ticker.toUpperCase()}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 38: get_research_briefing
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_research_briefing",
+  "Get a comprehensive investment research briefing for an NZX company. Assembles data from 15+ sources (governance, financials, insider activity, dividends, board, earnings, credit, performance, capital raises, announcements) with AI narrative synthesis. Supports 4 templates: 'general' (default), 'investment_thesis', 'due_diligence', 'board_meeting'. Use for 'research report on [company]', 'investment thesis for [ticker]', 'due diligence on [company]', 'company research briefing'.",
+  {
+    ticker: z
+      .string()
+      .describe("NZX ticker symbol (e.g. 'FPH', 'AIR')"),
+    template: z
+      .enum(["general", "investment_thesis", "due_diligence", "board_meeting"])
+      .optional()
+      .describe("Research template (default: 'general')"),
+    focus: z
+      .string()
+      .optional()
+      .describe("Comma-separated focus areas (e.g. 'dividends,governance,insider activity')"),
+  },
+  async ({ ticker, template, focus }) => {
+    const text = await api(`/research/${ticker.toUpperCase()}`, {
+      template,
+      focus,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
 
