@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.17.0",
+  version: "1.19.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -935,6 +935,85 @@ server.tool(
       year,
       type,
       limit,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 33: list_alert_subscriptions
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "list_alert_subscriptions",
+  "List all alert subscriptions for the authenticated user. Each subscription filters market signals and anomalies by tickers, sectors, signal types (insider_trade, capital_raise, dividend, earnings, agm_result, director_change, grs_change, technical_signal, credit_rating, audit_change, takeover), anomaly categories (insider, governance, financial, market, agm, corporate), and severity levels — then delivers via webhook with HMAC-SHA256 signing. Enterprise tier required.",
+  {},
+  async () => {
+    const text = await api("/alerts/subscriptions");
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 34: get_capital_raises
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_capital_raises",
+  "Get capital raise history for an NZX company. 11,088 events across 130 issuers. Includes placements, rights issues, SPPs, IPOs, bonds, buybacks, DRPs, options exercises, employee schemes, and conversions. Returns shares issued, price, total amount (NZD), discount %, dilution %, purpose. Use for 'capital raises for [company]', 'how much has [company] raised?', 'buyback history', 'dilution risk'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'AIR', 'FBU', 'RYM')"),
+    year: z
+      .string()
+      .optional()
+      .describe("Filter by year (e.g. '2025') or range (e.g. '2020-2025')"),
+    type: z
+      .string()
+      .optional()
+      .describe("Comma-separated raise types: placement, rights_issue, spp, ipo, bond, buyback, drp, options_exercise, employee_scheme, conversion"),
+    buybacks: z
+      .string()
+      .optional()
+      .describe("Set to 'true' to only show buybacks"),
+    limit: z.number().min(1).max(200).optional().describe("Number of results (default 50)"),
+  },
+  async ({ ticker, year, type, buybacks, limit }) => {
+    const text = await api(`/capital-raises/${ticker.toUpperCase()}`, { year, type, buybacks, limit });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 35: get_semantic_search
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_semantic_search",
+  "Search 64,000+ NZX announcements using AI semantic search. Uses text-embedding-3-small vectors with hybrid keyword+semantic+reranking for best results. Finds conceptual matches that keyword search misses (e.g. 'climate risk' finds 'environmental exposure'). Returns relevance-ranked results with similarity scores and text snippets.",
+  {
+    q: z.string().describe("Search query (e.g. 'climate risk disclosure', 'CEO succession planning', 'covenant breach')"),
+    ticker: z
+      .string()
+      .optional()
+      .describe("Filter by company ticker (e.g. 'AIR')"),
+    type: z
+      .string()
+      .optional()
+      .describe("Filter by announcement type (e.g. 'GENERAL', 'FLLYR')"),
+    from: z.string().optional().describe("Start date in YYYY-MM-DD format"),
+    to: z.string().optional().describe("End date in YYYY-MM-DD format"),
+    limit: z.number().min(1).max(50).optional().describe("Number of results (default 10)"),
+  },
+  async ({ q, ticker, type, from, to, limit }) => {
+    const text = await api("/semantic-search", {
+      q,
+      ticker,
+      type,
+      from,
+      to,
+      limit: limit || 10,
+      mode: "hybrid",
+      rerank: "true",
     });
     return { content: [{ type: "text" as const, text }] };
   },

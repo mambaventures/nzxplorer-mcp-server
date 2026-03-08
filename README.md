@@ -43,6 +43,15 @@ npm install -g nzxplorer-mcp
 | `get_board_composition_report` | Board composition analytics — independence, diversity, tenure, skills, succession risk, peer comparison |
 | `get_accounting_quality` | Accounting quality scores — Beneish M-score, Piotroski F-score, Altman Z-score, interest coverage, current ratio, overall rating |
 | `get_credit_ratings` | Credit ratings from S&P, Moody's, Fitch, AM Best — rating, outlook, action, history |
+| `get_risk_language` | Risk language scoring — 8 categories (going concern, covenant, litigation, etc.) across 64K+ announcements |
+| `search_keyword_trends` | Keyword frequency trends across NZX announcements — like Google Trends for corporate filings |
+| `list_stewardship_reports` | List FMA-compliant stewardship/voting-record reports (Enterprise) |
+| `get_stewardship_report` | Full stewardship report detail with per-company resolution analysis (Enterprise) |
+| `list_voting_policies` | List custom voting policies for the proxy advisory engine (Enterprise/Institutional) |
+| `get_revenue_segments` | Revenue segment breakdown — IFRS 8 operating, geographic, product segments |
+| `list_alert_subscriptions` | List alert subscriptions — 11 signal types, 6 anomaly categories, HMAC-SHA256 webhooks (Enterprise) |
+| `get_capital_raises` | Capital raise history — 11,088 events across 130 issuers (placements, rights, SPPs, buybacks, DRPs) |
+| `get_semantic_search` | AI semantic search across 64K+ announcements — hybrid keyword+vector+reranking |
 
 ## Setup
 
