@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.19.0",
+  version: "1.20.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -1014,6 +1014,44 @@ server.tool(
       limit: limit || 10,
       mode: "hybrid",
       rerank: "true",
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 36: get_iod_designations
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_iod_designations",
+  "Get Institute of Directors (IoD) designated directors serving on NZX boards. Shows CFInstD (Chartered Fellow — highest designation), CMInstD (Chartered Member), CDir (Chartered Director), and MInstD (Member). Returns current board seats, chair status, gender, and summary statistics. Use for 'IoD directors at [company]', 'chartered directors', 'governance credentials', 'CFInstD directors', 'professional director qualifications'.",
+  {
+    designation: z
+      .string()
+      .optional()
+      .describe("Filter by IoD designation: 'CFInstD', 'CMInstD', 'CDir', 'MInstD'"),
+    ticker: z
+      .string()
+      .optional()
+      .describe("Filter by NZX ticker to see IoD directors at a specific company (e.g. 'FPH')"),
+    name: z
+      .string()
+      .optional()
+      .describe("Search by director name"),
+    limit: z
+      .number()
+      .min(1)
+      .max(200)
+      .optional()
+      .describe("Number of results (default 50)"),
+  },
+  async ({ designation, ticker, name, limit }) => {
+    const text = await api("/iod-designations", {
+      designation,
+      ticker: ticker?.toUpperCase(),
+      name,
+      limit,
     });
     return { content: [{ type: "text" as const, text }] };
   },
