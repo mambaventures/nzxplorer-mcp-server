@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.20.0",
+  version: "1.23.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -1133,6 +1133,50 @@ server.tool(
       fund_manager,
       year,
       vote,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 40: get_announcement_sentiment
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_announcement_sentiment",
+  "Get AI-scored sentiment analysis of NZX company announcements. Returns per-announcement sentiment scores (-1 to +1), confidence levels, hedging analysis, buried risks, key topics, and guidance direction. Includes company-level summary with average score, sentiment breakdown, and overall rating. Use for 'sentiment on [company] announcements', 'what is the tone of [ticker] filings', 'buried risks in [company] announcements', 'announcement sentiment', 'hedging language'.",
+  {
+    ticker: z
+      .string()
+      .describe("NZX ticker symbol (e.g. 'AIR', 'FPH')"),
+    sentiment: z
+      .string()
+      .optional()
+      .describe("Filter by sentiment: positive, negative, neutral, mixed"),
+    hedging: z
+      .string()
+      .optional()
+      .describe("Filter by hedging level: none, low, moderate, heavy"),
+    from: z
+      .string()
+      .optional()
+      .describe("Start date (YYYY-MM-DD)"),
+    to: z
+      .string()
+      .optional()
+      .describe("End date (YYYY-MM-DD)"),
+    limit: z
+      .number()
+      .optional()
+      .describe("Max results (default 20)"),
+  },
+  async ({ ticker, sentiment, hedging, from, to, limit }) => {
+    const text = await api(`/sentiment/${ticker.toUpperCase()}`, {
+      sentiment,
+      hedging,
+      from,
+      to,
+      limit,
     });
     return { content: [{ type: "text" as const, text }] };
   },
