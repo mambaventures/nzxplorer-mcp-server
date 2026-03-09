@@ -1199,6 +1199,26 @@ server.tool(
 );
 
 // ---------------------------------------------------------------------------
+// Tool 41: get_peer_mentions
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_peer_mentions",
+  "Get peer mentions for an NZX company — cross-company references extracted from 62,000+ NZX announcements. Shows which companies mention this ticker and which companies it references, with context snippets and network summary. Use for 'who mentions [company]?', 'business relationships for [company]', 'competitive peers', 'peer network'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'SPK')"),
+    direction: z
+      .enum(["mentions", "mentioned_by", "both"])
+      .optional()
+      .describe("Filter: 'mentions' (who this company references), 'mentioned_by' (who references it), or 'both' (default)"),
+  },
+  async ({ ticker, direction }) => {
+    const text = await api(`/peer-mentions/${ticker.toUpperCase()}`, { direction });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
 
