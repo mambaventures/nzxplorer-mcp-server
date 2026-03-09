@@ -1105,6 +1105,40 @@ server.tool(
 );
 
 // ---------------------------------------------------------------------------
+// Tool 39: get_fund_votes
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_fund_votes",
+  "Get actual voting records from NZ fund managers (Harbour, Devon, Mint, Fisher, NZ Super Fund) for an NZX company. Shows how institutional investors voted on AGM resolutions — FOR, AGAINST, or ABSTAIN. Includes ISS recommendations and management recommendations. Use for 'how did funds vote on [company]', 'fund voting records', 'institutional votes', 'AGM voting', 'proxy votes'.",
+  {
+    ticker: z
+      .string()
+      .describe("NZX ticker symbol (e.g. 'AIR', 'FPH')"),
+    fund_manager: z
+      .string()
+      .optional()
+      .describe("Filter by fund manager name (e.g. 'Harbour', 'Devon', 'NZ Super')"),
+    year: z
+      .string()
+      .optional()
+      .describe("Filter by year (e.g. '2024') or range (e.g. '2023-2025')"),
+    vote: z
+      .string()
+      .optional()
+      .describe("Filter by vote cast (FOR, AGAINST, ABSTAIN)"),
+  },
+  async ({ ticker, fund_manager, year, vote }) => {
+    const text = await api(`/fund-votes/${ticker.toUpperCase()}`, {
+      fund_manager,
+      year,
+      vote,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
 

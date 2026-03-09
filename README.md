@@ -55,6 +55,7 @@ npm install -g nzxplorer-mcp
 | `get_iod_designations` | IoD designated directors — CFInstD, CMInstD, CDir, MInstD credentials on NZX boards |
 | `get_board_skills_matrix` | Board skills matrix — 12 IoD NZ/ASX categories, gap analysis, diversity score |
 | `get_research_briefing` | Investment research briefing — 15+ data sources, AI narrative, 4 templates (general/thesis/DD/board) |
+| `get_fund_votes` | Fund manager voting records — Harbour, Devon, Mint, Fisher, NZ Super Fund. FOR/AGAINST/ABSTAIN per resolution |
 
 ## Setup
 
