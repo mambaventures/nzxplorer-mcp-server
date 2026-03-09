@@ -1183,6 +1183,22 @@ server.tool(
 );
 
 // ---------------------------------------------------------------------------
+// Tool 40: get_ir_quality
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_ir_quality",
+  "Get the IR (Investor Relations) disclosure quality score for an NZX company. Scores 5 dimensions: Timeliness (OECD/NZX Rule 10.4.1), Completeness (CFA DQI/S&P T&D), Readability (Loughran-McDonald proxy), Frequency (NIRI Standards), Governance Transparency (S&P T&D/GRS v2). Composite score 0-100, rating A+ to D, trajectory improving/stable/declining. 131 issuers scored. Use for 'how good is [company] at disclosure?', 'IR quality for [company]', 'disclosure quality', 'transparency score'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'AIR', 'FPH', 'MEL')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/ir-quality/${ticker.toUpperCase()}`, {});
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
 
