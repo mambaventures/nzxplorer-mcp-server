@@ -1219,6 +1219,22 @@ server.tool(
 );
 
 // ---------------------------------------------------------------------------
+// Tool 42: get_political_connections
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_political_connections",
+  "Get political connections for an NZX company. Returns MP interests (gifts, hospitality, shareholdings, travel mentioning this company from the NZ Parliamentary Register of Interests), political donors linked to the company or its directors, and party donation records from the Electoral Commission (2019-2024). Use for 'political connections for [company]', 'which MPs are connected to [company]?', 'do any directors donate to political parties?', 'political exposure'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'SKC', 'AIR', 'SAN')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/political-connections/${ticker.toUpperCase()}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
 
