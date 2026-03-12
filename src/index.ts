@@ -1235,6 +1235,24 @@ server.tool(
 );
 
 // ---------------------------------------------------------------------------
+// Tool 43: get_management_team
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_management_team",
+  "Get the management team (C-suite executives) for an NZX company. Returns current CEO, CFO, COO, CTO, and other senior executives with roles, tenure, biographies, and profile links. 127 issuers covered, 508 current executives across 15 normalized roles (CEO, CFO, COO, CTO, CIO, CLO, CPO, CMO, CRO, CDO, CS, GM, VP, MD, Other). Use for 'who is the CEO of [company]?', 'management team for [ticker]', 'C-suite at [company]', 'executive leadership'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'FPH', 'AIR', 'SPK')"),
+    role: z.string().optional().describe("Filter by normalized role (e.g. 'CEO', 'CFO', 'COO', 'CTO')"),
+  },
+  async ({ ticker, role }) => {
+    const params = role ? `?role=${encodeURIComponent(role)}` : "";
+    const text = await api(`/management-team/${ticker.toUpperCase()}${params}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
 
