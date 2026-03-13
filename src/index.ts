@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.23.0",
+  version: "1.29.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -1248,6 +1248,56 @@ server.tool(
   async ({ ticker, role }) => {
     const params = role ? `?role=${encodeURIComponent(role)}` : "";
     const text = await api(`/management-team/${ticker.toUpperCase()}${params}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 44: get_beneficial_ownership
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_beneficial_ownership",
+  "Get beneficial ownership intelligence for an NZX company. Sees through custodian nominees (HSBC, BNP Paribas, Citibank) to identify actual fund managers behind NZX shareholdings. Returns fund manager positions, custodian mappings, and fund holdings from factsheet data. 56 fund managers tracked, covering ETF providers, KiwiSaver managers, sovereign wealth funds, and international institutional investors. Use for 'who owns [company]?', 'beneficial ownership', 'which fund managers hold [ticker]?', 'institutional ownership', 'custodian nominees'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'FPH', 'AIR', 'SPK')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/beneficial-ownership/${ticker.toUpperCase()}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 45: get_substantial_holder_notices
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_substantial_holder_notices",
+  "Get classified substantial holder notices (SPH) for an NZX company. Returns all substantial product holder notices with extracted holder names, percentage holdings, direction (increase/decrease/initial/ceased), and fund manager matching. 9,700+ notices classified from NZX SHINTR announcements. Use for 'substantial holders of [ticker]', 'SPH notices', 'who increased holdings in [company]?', 'recent ownership changes', 'substantial product holder movements'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'FPH', 'AIR', 'SPK')"),
+    direction: z.enum(["increase", "decrease", "initial", "ceased"]).optional().describe("Filter by direction of holding change"),
+    limit: z.number().optional().describe("Max results (default 50)"),
+  },
+  async ({ ticker, direction, limit }) => {
+    const text = await api(`/substantial-holders/${ticker.toUpperCase()}/notices`, { direction, limit });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 46: get_corporate_giving
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_corporate_giving",
+  "Get corporate donations, sponsorships, and community investment for an NZX company. Shows recipients, amounts, donation types (cash/sponsorship/community_investment/grant/in-kind), foundation name, and total community investment. Cross-linked to registered charities where possible. Use for 'what charities does [company] support?', 'corporate giving', 'community investment', 'sponsorship', 'donations by [ticker]'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'SPK', 'AIR', 'GMT')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/corporate-giving/${ticker.toUpperCase()}`);
     return { content: [{ type: "text" as const, text }] };
   },
 );
