@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.29.0",
+  version: "1.30.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -1298,6 +1298,22 @@ server.tool(
   },
   async ({ ticker }) => {
     const text = await api(`/corporate-giving/${ticker.toUpperCase()}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 47: get_property_portfolio
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_property_portfolio",
+  "Get property portfolio data for an NZX-listed REIT or property company. Returns individual properties with addresses, book values, cap rates, WALE, occupancy, major tenants, geocoded locations, plus summary stats (total value, avg cap rate, avg WALE, avg occupancy), type/regional breakdowns, top tenants, and development pipeline. Covers ~10 property companies (KPG, ARG, PFI, VHP, IPL, SPG, CDI, GMT, PCT, APL). Use for 'property portfolio', 'REIT assets', 'commercial property', 'cap rate', 'WALE', 'occupancy', 'tenant exposure'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'KPG', 'GMT', 'PFI', 'ARG')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/property-portfolio/${ticker.toUpperCase()}`);
     return { content: [{ type: "text" as const, text }] };
   },
 );
