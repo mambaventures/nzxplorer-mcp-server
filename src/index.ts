@@ -1318,6 +1318,27 @@ server.tool(
   },
 );
 
+// Tool 48: get_fair_value
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_fair_value",
+  "Get estimated fair value for an NZX company using 3 valuation models: DCF (discounted cash flow), Dividend Discount Model (Gordon Growth), and EV/EBITDA relative valuation. Returns composite fair value per share, price-to-fair-value ratio, individual model outputs, confidence level, assumptions used, and methodology notes. NOTE: This is an automated estimate using standard financial models, NOT a target price or investment recommendation.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'FPH', 'AIR')"),
+    discount_rate: z.number().optional().describe("Discount rate / WACC (default 0.10 = 10%)"),
+    terminal_growth: z.number().optional().describe("Terminal growth rate (default 0.025 = 2.5%)"),
+  },
+  async ({ ticker, discount_rate, terminal_growth }) => {
+    const params = new URLSearchParams();
+    if (discount_rate !== undefined) params.set("discount_rate", String(discount_rate));
+    if (terminal_growth !== undefined) params.set("terminal_growth", String(terminal_growth));
+    const qs = params.toString() ? `?${params.toString()}` : "";
+    const text = await api(`/fair-value/${ticker.toUpperCase()}${qs}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
 // ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
