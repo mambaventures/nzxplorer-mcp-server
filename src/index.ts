@@ -1339,6 +1339,117 @@ server.tool(
   },
 );
 
+// Tool 49: get_deal_advisers
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_deal_advisers",
+  "Get professional advisers (law firms, investment banks, valuers) who advised on capital raises and takeovers for an NZX company. Shows which firms acted as legal counsel, underwriter, lead manager, independent adviser, or valuer on each deal. Includes deal details (amount, type, date) and adviser roles. Use for deal intelligence, adviser league tables, or capital markets analysis.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'CEN', 'FPH')"),
+    deal_type: z.string().optional().describe("Filter: 'capital_raise' or 'takeover'"),
+    role: z.string().optional().describe("Filter by adviser role: legal_issuer, underwriter, lead_manager, financial_adviser, independent_adviser, valuer, etc."),
+  },
+  async ({ ticker, deal_type, role }) => {
+    const params = new URLSearchParams();
+    if (deal_type) params.set("deal_type", deal_type);
+    if (role) params.set("role", role);
+    const qs = params.toString() ? `?${params.toString()}` : "";
+    const text = await api(`/deal-advisers/${ticker.toUpperCase()}${qs}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// Tool 50: get_company_directorships
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_company_directorships",
+  "Get full directorship history for any person from the NZ Companies Register. Shows all company roles (NZX-listed + private companies), current and historical, with company status (active/struck off/liquidating) and failure rate analysis. Use when asked about a person's full board network, private company roles, directorship workload, or company failure history.",
+  {
+    slug: z.string().describe("Person slug from shared.people (e.g. 'rob-campbell', 'joan-withers')"),
+  },
+  async ({ slug }) => {
+    const text = await api(`/directorships/${slug}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// Tool 51: get_director_workload
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_director_workload",
+  "Get workload analysis for a director — current NZX board seats, active Companies Office directorships, overboarding risk level (low/average/elevated/high), board meeting attendance rate, tenure at each board, and chair/committee roles. Use for overboarding checks, governance due diligence, or board capacity assessment.",
+  {
+    slug: z.string().describe("Person slug from shared.people (e.g. 'rob-campbell')"),
+  },
+  async ({ slug }) => {
+    const text = await api(`/director-workload/${slug}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// Tool 52: get_director_network
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_director_network",
+  "Cross-directorship and board interlock analysis with 3 modes: (1) company mode (?ticker=AIR) — shows all directors' external boards and shared entities, (2) director mode (?director=joan-withers) — person-centric 1-hop network, (3) network mode (no params) — NZX-wide cross-directorship map. Returns nodes, edges, and interlock metrics.",
+  {
+    ticker: z.string().optional().describe("NZX ticker for company mode (e.g. 'AIR')"),
+    director: z.string().optional().describe("Director slug for person mode (e.g. 'joan-withers')"),
+    include_historical: z.boolean().optional().describe("Include historical positions (default false)"),
+  },
+  async ({ ticker, director, include_historical }) => {
+    const params = new URLSearchParams();
+    if (ticker) params.set("ticker", ticker.toUpperCase());
+    if (director) params.set("director", director);
+    if (include_historical) params.set("include_historical", "true");
+    const qs = params.toString() ? `?${params.toString()}` : "";
+    const text = await api(`/director-network${qs}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// Tool 53: get_board_pipeline
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_board_pipeline",
+  "Directors who have recently freed up board capacity — resignations, retirements, and reduced workloads in the last 12 months. Returns departed directors with their remaining board count, skills, qualifications, and departure details. Use for board recruitment, candidate identification, or talent pipeline analysis.",
+  {
+    sector: z.string().optional().describe("Filter by sector (e.g. 'Energy', 'Healthcare')"),
+    skill: z.string().optional().describe("Filter by skill category (e.g. 'governance', 'financial')"),
+    limit: z.number().optional().describe("Max results (default 20, max 200)"),
+  },
+  async ({ sector, skill, limit }) => {
+    const params = new URLSearchParams();
+    if (sector) params.set("sector", sector);
+    if (skill) params.set("skill", skill);
+    if (limit !== undefined) params.set("limit", String(limit));
+    const qs = params.toString() ? `?${params.toString()}` : "";
+    const text = await api(`/board-pipeline${qs}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 53: get_governance_scorecard
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_governance_scorecard",
+  "Get a per-company governance scorecard with RAG (red/amber/green) ratings across 15 policy areas aligned with NZSA governance policies and the NZX Corporate Governance Code v1.7. Covers: remuneration disclosure, CEO rem structure, board independence, audit independence (non-audit >25% flag), director tenure (9yr threshold), board diversity (30% target), shareholder voting dissent (<75% threshold), ESG profile, capital management, takeover vulnerability, management credibility, succession readiness, audit firm tenure, director share ownership, whistleblowing. Returns overall score 0-100, individual policy assessments with scores and data. Use for 'governance scorecard for [company]', 'governance assessment', 'board governance quality', 'NZSA-aligned governance report'.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'FPH', 'AIR', 'SPK')"),
+  },
+  async ({ ticker }) => {
+    const text = await api(`/governance-scorecard/${ticker.toUpperCase()}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
 // ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------

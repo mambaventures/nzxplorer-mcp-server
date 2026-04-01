@@ -56,6 +56,11 @@ npm install -g nzxplorer-mcp
 | `get_board_skills_matrix` | Board skills matrix — 12 IoD NZ/ASX categories, gap analysis, diversity score |
 | `get_research_briefing` | Investment research briefing — 15+ data sources, AI narrative, 4 templates (general/thesis/DD/board) |
 | `get_fund_votes` | Fund manager voting records — Harbour, Devon, Mint, Fisher, NZ Super Fund. FOR/AGAINST/ABSTAIN per resolution |
+| `get_deal_advisers` | Deal advisers — law firms, investment banks, valuers who advised on capital raises and takeovers |
+| `get_company_directorships` | Full directorship history from NZ Companies Register — NZX + private companies, status, failure rate |
+| `get_director_workload` | Workload analysis — NZX board seats, Companies Office roles, overboarding risk, attendance, tenure |
+| `get_director_network` | Cross-directorship and board interlock analysis — company, director, or NZX-wide mode |
+| `get_board_pipeline` | Directors who recently freed up capacity — resignations, retirements, available talent for recruitment |
 
 ## Setup
 
