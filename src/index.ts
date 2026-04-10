@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.30.0",
+  version: "1.35.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -1446,6 +1446,18 @@ server.tool(
   },
   async ({ ticker }) => {
     const text = await api(`/governance-scorecard/${ticker.toUpperCase()}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+server.tool(
+  "check_insolvency_status",
+  "Check insolvency/bankruptcy history for any person in the NZXplorer database. Queries the MBIE Insolvency Register for bankruptcy, no-asset procedures, and summary instalment orders. Returns TTL-filtered records per MBIE Agreement cl 4.5-4.6. Use when asked about a person's insolvency history, bankruptcy status, financial fitness to serve as director, or due diligence screening.",
+  {
+    slug: z.string().describe("Person slug from NZXplorer (e.g. 'john-smith')"),
+  },
+  async ({ slug }) => {
+    const text = await api(`/insolvency/${encodeURIComponent(slug)}`);
     return { content: [{ type: "text" as const, text }] };
   },
 );
