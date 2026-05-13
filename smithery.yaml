@@ -1,0 +1,27 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+
+configSchema:
+  type: object
+  required:
+    - nzxplorerApiKey
+  properties:
+    nzxplorerApiKey:
+      type: string
+      description: Your NZXplorer API key — get one free at https://nzxplorer.co.nz/developers
+    nzxplorerApiUrl:
+      type: string
+      description: Override the API base URL (defaults to https://nzxplorer.co.nz)
+      default: https://nzxplorer.co.nz
+
+commandFunction: |-
+  (config) => ({
+    command: 'npx',
+    args: ['-y', 'nzxplorer-mcp'],
+    env: {
+      NZXPLORER_API_KEY: config.nzxplorerApiKey,
+      ...(config.nzxplorerApiUrl ? { NZXPLORER_API_URL: config.nzxplorerApiUrl } : {})
+    }
+  })
