@@ -16,7 +16,7 @@ Or install globally:
 npm install -g nzxplorer-mcp
 ```
 
-## Available Tools
+## Available Tools (55)
 
 | Tool | Description |
 |------|-------------|
@@ -61,6 +61,20 @@ npm install -g nzxplorer-mcp
 | `get_director_workload` | Workload analysis — NZX board seats, Companies Office roles, overboarding risk, attendance, tenure |
 | `get_director_network` | Cross-directorship and board interlock analysis — company, director, or NZX-wide mode |
 | `get_board_pipeline` | Directors who recently freed up capacity — resignations, retirements, available talent for recruitment |
+| `get_financials_xbrl` | Machine-readable iXBRL income/balance/cash-flow with IFRS taxonomy tags. 116 companies, FY2010-2025 |
+| `get_esg_xbrl` | Machine-readable NZ CS 1-3 tagged ESG/climate disclosure — Scope 1/2/3 emissions, diversity, safety, GRI/TCFD/SBTi/SDG |
+| `get_announcement_sentiment` | AI-scored sentiment (-1 to +1) for NZX announcements with confidence, hedging, buried risks, guidance direction |
+| `get_ir_quality` | IR disclosure quality score (0-100) — 5 dimensions: Timeliness, Completeness, Readability, Frequency, Governance Transparency |
+| `get_peer_mentions` | Cross-company references extracted from 62,000+ NZX announcements — who mentions whom, with context snippets |
+| `get_political_connections` | MP interests, political donors, and party donations linked to an NZX company or its directors |
+| `get_management_team` | Current C-suite (CEO/CFO/COO/CTO/etc.) with roles, tenure, biographies. 127 issuers, 508 executives |
+| `get_beneficial_ownership` | See through custodian nominees to fund managers behind NZX shareholdings. 56 fund managers, KiwiSaver/ETF/sovereign |
+| `get_substantial_holder_notices` | Classified SPH notices with extracted holders, %, direction (increase/decrease/initial/ceased). 9,700+ notices |
+| `get_corporate_giving` | Corporate donations, sponsorships, community investment — recipients, amounts, types, charity cross-links |
+| `get_property_portfolio` | REIT/property-company portfolios — addresses, book values, cap rate, WALE, occupancy, tenants, dev pipeline |
+| `get_fair_value` | Estimated fair value per share via DCF + Dividend Discount + EV/EBITDA models. Estimate, not a target price |
+| `get_governance_scorecard` | Per-company governance scorecard — 15 NZSA/NZX-aligned policy areas with RAG ratings and overall 0-100 score |
+| `check_insolvency_status` | MBIE Insolvency Register lookup — bankruptcy, no-asset procedures, summary instalment orders by person slug |
 
 ## Setup
 
