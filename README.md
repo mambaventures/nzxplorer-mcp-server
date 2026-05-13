@@ -16,7 +16,7 @@ Or install globally:
 npm install -g nzxplorer-mcp
 ```
 
-## Available Tools (55)
+## Available Tools (58)
 
 | Tool | Description |
 |------|-------------|
@@ -75,6 +75,9 @@ npm install -g nzxplorer-mcp
 | `get_fair_value` | Estimated fair value per share via DCF + Dividend Discount + EV/EBITDA models. Estimate, not a target price |
 | `get_governance_scorecard` | Per-company governance scorecard — 15 NZSA/NZX-aligned policy areas with RAG ratings and overall 0-100 score |
 | `check_insolvency_status` | MBIE Insolvency Register lookup — bankruptcy, no-asset procedures, summary instalment orders by person slug |
+| `get_officer_history` | Full historical officer timeline for a company — every director + executive who ever held a role, with start/end dates, tenure, committees, status |
+| `get_compensation_benchmark` | P10/P25/P50/P75/P90 compensation percentiles for a role (CEO/CFO/COO/Chair/Director/etc.) across NZX, with sector + market-cap-tier breakdowns |
+| `get_daily_market_wrap` | Daily NZX market wrap — price moves, breadth (gainers/decliners), announcements, insider trades, upcoming dividends, board changes + AI narrative summary |
 
 ## Setup
 

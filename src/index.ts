@@ -47,7 +47,7 @@ async function api(
 
 const server = new McpServer({
   name: "nzxplorer",
-  version: "1.35.0",
+  version: "1.36.0",
 });
 
 // ---------------------------------------------------------------------------
@@ -1458,6 +1458,96 @@ server.tool(
   },
   async ({ slug }) => {
     const text = await api(`/insolvency/${encodeURIComponent(slug)}`);
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 56: get_officer_history
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_officer_history",
+  "Get the full historical officer timeline for an NZX company — every director and executive who has ever held a role, with start/end dates, tenure, status, and committees. Includes both board members (from director_appointments) and C-suite executives (from management_team). Each officer carries a stable permanent_id (NZX-P-NNNNNN) for cross-referencing across NZXplorer. Use for questions about past leadership, board turnover, executive churn, board refreshment, or who used to run a company.",
+  {
+    ticker: z.string().describe("NZX ticker symbol (e.g. 'FPH', 'AIR', 'SPK')"),
+    type: z
+      .string()
+      .optional()
+      .describe("Filter by officer type: 'board', 'executive', or 'all' (default 'all')"),
+    status: z
+      .string()
+      .optional()
+      .describe("Filter by status (comma-separated): 'current,resigned,retired'"),
+    role: z
+      .string()
+      .optional()
+      .describe("Filter by role keyword (comma-separated): 'chair,ceo,cfo,director'"),
+    from: z
+      .string()
+      .optional()
+      .describe("Only appointments effective on/after this date (YYYY-MM-DD)"),
+    to: z
+      .string()
+      .optional()
+      .describe("Only appointments effective on/before this date (YYYY-MM-DD)"),
+  },
+  async ({ ticker, type, status, role, from, to }) => {
+    const text = await api(`/officers/${ticker.toUpperCase()}/history`, { type, status, role, from, to });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 57: get_compensation_benchmark
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_compensation_benchmark",
+  "Get compensation percentile benchmarking for a specific executive or board role across all NZX companies. Returns P10/P25/P50/P75/P90 percentiles, mean, min, max, plus breakdowns by sector and market-cap tier (micro/small/mid/large). Use for questions about market pay rates, peer-comparison benchmarks, whether a company overpays or underpays for a role, or due-diligence on remuneration committee decisions.",
+  {
+    role: z
+      .string()
+      .describe(
+        "Role to benchmark — one of: 'ceo', 'cfo', 'coo', 'chair', 'director', 'cto', 'cio', 'cro', 'general-counsel', 'company-secretary'",
+      ),
+    year: z
+      .number()
+      .optional()
+      .describe("Financial year filter (default: latest available per company)"),
+    sector: z.string().optional().describe("Filter by sector (e.g. 'Healthcare', 'Energy')"),
+    market_cap: z
+      .string()
+      .optional()
+      .describe("Filter by market-cap tier: 'micro', 'small', 'mid', or 'large'"),
+  },
+  async ({ role, year, sector, market_cap }) => {
+    const text = await api(`/compensation-benchmark/${encodeURIComponent(role)}`, {
+      year,
+      sector,
+      market_cap,
+    });
+    return { content: [{ type: "text" as const, text }] };
+  },
+);
+
+// ---------------------------------------------------------------------------
+// Tool 58: get_daily_market_wrap
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "get_daily_market_wrap",
+  "Get the daily NZX market wrap — a market-wide digest covering all active NZX issuers. Returns price moves, market breadth (gainers/decliners/unchanged), announcements, insider trades, upcoming dividends, board changes, plus an AI-generated narrative summary. Use for questions about today's NZX market, overall market conditions, what happened across the NZX, or weekly market summary.",
+  {
+    days: z
+      .number()
+      .min(1)
+      .max(7)
+      .optional()
+      .describe("Lookback window in days (1-7, default 7). Use 1 for last trading day."),
+  },
+  async ({ days }) => {
+    const text = await api("/market-wrap", { days });
     return { content: [{ type: "text" as const, text }] };
   },
 );
