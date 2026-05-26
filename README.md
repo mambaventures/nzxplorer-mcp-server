@@ -1,8 +1,25 @@
 # NZXplorer MCP Server
 
-An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that gives AI assistants like Claude Desktop and Cursor direct access to New Zealand stock market data via the [NZXplorer API](https://nzxplorer.co.nz/developers).
+[![Install in Cursor](https://img.shields.io/badge/Install_in-Cursor-blue?style=flat&logo=cursor)](cursor://anysphere.cursor-deeplink/mcp/install?name=nzxplorer&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm56eHBsb3Jlci1tY3AiXSwiZW52Ijp7Ik5aWFBMT1JFUl9BUElfS0VZIjoiWU9VUl9BUElfS0VZIn19)
+[![Install in VS Code](https://img.shields.io/badge/Install_in-VS_Code-007ACC?style=flat&logo=visualstudiocode)](vscode:mcp/install?%7B%22name%22%3A%22nzxplorer%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22nzxplorer-mcp%22%5D%2C%22env%22%3A%7B%22NZXPLORER_API_KEY%22%3A%22YOUR_API_KEY%22%7D%7D)
+[![Smithery](https://smithery.ai/badge/@mambaventures/nzxplorer-mcp)](https://smithery.ai/server/@mambaventures/nzxplorer-mcp)
+[![npm version](https://img.shields.io/npm/v/nzxplorer-mcp.svg)](https://www.npmjs.com/package/nzxplorer-mcp)
+
+An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that gives AI assistants like Claude Desktop, Cursor, VS Code, and Claude Code direct access to New Zealand stock market data via the [NZXplorer API](https://nzxplorer.co.nz/developers).
 
 Query 130 NZX-listed companies, 1,300+ directors, 162,000+ daily stock prices, governance risk scores, 4,100+ insider trades, 64,000+ company announcements, board composition analytics, anomaly detection, market signals, proxy advisory voting recommendations, and a powerful stock screener with 87+ metrics — all from natural language.
+
+## One-click install
+
+| Client | Install |
+|--------|---------|
+| **Cursor** | [Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=nzxplorer&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm56eHBsb3Jlci1tY3AiXSwiZW52Ijp7Ik5aWFBMT1JFUl9BUElfS0VZIjoiWU9VUl9BUElfS0VZIn19) (deeplink) |
+| **VS Code** | [Add to VS Code](vscode:mcp/install?%7B%22name%22%3A%22nzxplorer%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22nzxplorer-mcp%22%5D%2C%22env%22%3A%7B%22NZXPLORER_API_KEY%22%3A%22YOUR_API_KEY%22%7D%7D) (deeplink) |
+| **Claude Code** | `claude mcp add nzxplorer -- npx -y nzxplorer-mcp` |
+| **Claude Desktop / Windsurf / Goose** | `npx -y @smithery/cli@latest install @mambaventures/nzxplorer-mcp --client claude` (replace `claude` with `windsurf` / `goose`) |
+| **Any client (Smithery)** | [Install via Smithery](https://smithery.ai/server/@mambaventures/nzxplorer-mcp) |
+
+After install, set `NZXPLORER_API_KEY` from your [NZXplorer Settings → API & Developer](https://nzxplorer.co.nz/settings?section=api) page.
 
 ## Quick Install (npm)
 
