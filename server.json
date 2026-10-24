@@ -18,7 +18,7 @@
     {
       "registryType": "npm",
       "identifier": "nzxplorer-mcp",
-      "version": "1.36.1",
+      "version": "1.36.0",
       "transport": { "type": "stdio" },
       "environmentVariables": [
         {
