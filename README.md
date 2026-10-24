@@ -11,7 +11,7 @@ Query 130 NZX-listed companies, 1,300+ directors, 162,000+ daily stock prices, g
 
 ## One-click install
 
-**Zero signup (easiest):** point any MCP client at the remote endpoint — no API key, 30 read-only tools, 30 calls/hour per IP:
+**Zero signup (easiest):** point any MCP client at the remote endpoint — no API key, 23 read-only tools, 30 calls/hour and 100 calls/day per IP:
 
 ```json
 { "mcpServers": { "nzxplorer": { "url": "https://mcp.nzxplorer.co.nz" } } }
@@ -19,7 +19,7 @@ Query 130 NZX-listed companies, 1,300+ directors, 162,000+ daily stock prices, g
 
 In **Claude Desktop / claude.ai**: Settings → Connectors → *Add custom connector* → paste `https://mcp.nzxplorer.co.nz`. In **Claude Code**: `claude mcp add --transport http nzxplorer https://mcp.nzxplorer.co.nz`.
 
-For the full 55-tool set with an API key (free at [nzxplorer.co.nz/developers](https://nzxplorer.co.nz/developers)):
+For the full tool set with an API key (free at [nzxplorer.co.nz/developers](https://nzxplorer.co.nz/developers)):
 
 | Client | Install |
 |--------|---------|
