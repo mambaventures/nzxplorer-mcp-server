@@ -6,7 +6,7 @@
     "url": "https://github.com/mambaventures/nzxplorer-mcp-server",
     "source": "github"
   },
-  "version": "1.36.0",
+  "version": "1.36.1",
   "websiteUrl": "https://nzxplorer.co.nz/for-agents",
   "remotes": [
     {
@@ -18,12 +18,12 @@
     {
       "registryType": "npm",
       "identifier": "nzxplorer-mcp",
-      "version": "1.36.0",
+      "version": "1.36.1",
       "transport": { "type": "stdio" },
       "environmentVariables": [
         {
           "name": "NZXPLORER_API_KEY",
-          "description": "NZXplorer API key — free at https://nzxplorer.co.nz/developers. Unlocks the full 55-tool set; the remote URL above needs no key for 30 read-only tools.",
+          "description": "NZXplorer API key — free at https://nzxplorer.co.nz/developers. Unlocks the full tool set; the remote URL above needs no key for 23 read-only tools.",
           "isRequired": true,
           "isSecret": true
         }
