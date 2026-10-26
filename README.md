@@ -2,7 +2,7 @@
 
 [![Install in Cursor](https://img.shields.io/badge/Install_in-Cursor-blue?style=flat&logo=cursor)](cursor://anysphere.cursor-deeplink/mcp/install?name=nzxplorer&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm56eHBsb3Jlci1tY3AiXSwiZW52Ijp7Ik5aWFBMT1JFUl9BUElfS0VZIjoiWU9VUl9BUElfS0VZIn19)
 [![Install in VS Code](https://img.shields.io/badge/Install_in-VS_Code-007ACC?style=flat&logo=visualstudiocode)](vscode:mcp/install?%7B%22name%22%3A%22nzxplorer%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22nzxplorer-mcp%22%5D%2C%22env%22%3A%7B%22NZXPLORER_API_KEY%22%3A%22YOUR_API_KEY%22%7D%7D)
-[![Smithery](https://smithery.ai/badge/@mambaventures/nzxplorer-mcp)](https://smithery.ai/server/@mambaventures/nzxplorer-mcp)
+[![LightNow capabilities](https://lightnow.ai/badge/io.github.mambaventures/nzxplorer-mcp)](https://lightnow.ai/servers/io.github.mambaventures/nzxplorer-mcp)
 [![npm version](https://img.shields.io/npm/v/nzxplorer-mcp.svg)](https://www.npmjs.com/package/nzxplorer-mcp)
 
 An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that gives AI assistants like Claude Desktop, Cursor, VS Code, and Claude Code direct access to New Zealand stock market data via the [NZXplorer API](https://nzxplorer.co.nz/developers).
